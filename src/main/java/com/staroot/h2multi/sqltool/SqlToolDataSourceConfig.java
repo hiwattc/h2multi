@@ -1,4 +1,4 @@
-package com.staroot.h2multi.entity2;
+package com.staroot.h2multi.sqltool;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.jpa.HibernatePersistenceProvider;
@@ -13,31 +13,29 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 @Configuration
 @EnableJpaRepositories(
-        basePackages = "com.staroot.h2multi.entity2",
-        entityManagerFactoryRef = "entityManagerFactory2",
-        transactionManagerRef = "transactionManager2"
+        basePackages = "com.staroot.h2multi.sqltool",
+        entityManagerFactoryRef = "sqlToolEntityManagerFactory",
+        transactionManagerRef = "sqlToolTransactionManager"
 )
-@EntityScan("com.staroot.h2multi.entity2")
-public class DataSource2Config {
+
+@EntityScan("com.staroot.h2multi.sqltool.entity")
+public class SqlToolDataSourceConfig {
 
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.db2")
-    public DataSource dataSource2() {
+    @ConfigurationProperties(prefix = "spring.datasource.sqltooldb")
+    public DataSource sqlToolDataSource() {
         return DataSourceBuilder.create().build();
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory2(
-            @Qualifier("dataSource2") DataSource dataSource) {
+    public LocalContainerEntityManagerFactoryBean sqlToolEntityManagerFactory(@Qualifier("sqlToolDataSource") DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
         emf.setDataSource(dataSource);
-        emf.setPackagesToScan("com.staroot.h2multi.entity2");
+        emf.setPackagesToScan("com.staroot.h2multi.sqltool");
         emf.setPersistenceProviderClass(HibernatePersistenceProvider.class); // Hibernate 영속성 공급자 설정
 
         Properties properties = new Properties();
@@ -50,10 +48,8 @@ public class DataSource2Config {
     }
 
     @Bean
-    @Qualifier("transactionManager2")
-    public JpaTransactionManager transactionManager2(EntityManagerFactory entityManagerFactory2) {
-        return new JpaTransactionManager(entityManagerFactory2);
+    @Qualifier("sqlToolTransactionManager")
+    public JpaTransactionManager sqlToolTransactionManager(EntityManagerFactory sqlToolEntityManagerFactory) {
+        return new JpaTransactionManager(sqlToolEntityManagerFactory);
     }
-
-
 }

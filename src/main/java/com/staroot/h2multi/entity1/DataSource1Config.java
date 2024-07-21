@@ -1,6 +1,7 @@
 package com.staroot.h2multi.entity1;
 
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.transaction.Transactional;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -50,6 +51,7 @@ public class DataSource1Config {
     }
 
     @Bean
+    @Qualifier("transactionManager1")
     public JpaTransactionManager transactionManager1(EntityManagerFactory entityManagerFactory1) {
         return new JpaTransactionManager(entityManagerFactory1);
     }

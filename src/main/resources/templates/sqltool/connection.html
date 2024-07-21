@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>SQL Editor</title>
+    <link rel="stylesheet" href="/sqltool/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<h1>SQL Editor</h1>
+<a href="/sqltool">Connection List</a><br>
+<form id="sqlForm">
+    <textarea name="sql" rows="10" cols="80" >SELECT * FROM DATABASECONNECTION</textarea><br>
+    <input type="hidden" name="connectionId" th:value="${connection.id}"/>
+    <button type="button" onclick="executeSql()">Execute</button>
+</form>
+<div id="result"></div>
+
+<script>
+    function executeSql() {
+        $.post('/sqltool/execute', $('#sqlForm').serialize(), function(data) {
+            var resultDiv = $('#result');
+            resultDiv.empty();
+
+            if (data.length > 0) {
+                var table = $('<table/>');
+                var thead = $('<thead/>');
+                var tbody = $('<tbody/>');
+                var headerRow = $('<tr/>');
+
+                for (var key in data[0]) {
+                    headerRow.append($('<th/>').text(key));
+                }
+                thead.append(headerRow);
+                table.append(thead);
+
+                data.forEach(function(row) {
+                    var bodyRow = $('<tr/>');
+                    for (var key in row) {
+                        bodyRow.append($('<td/>').text(row[key]));
+                    }
+                    tbody.append(bodyRow);
+                });
+
+                table.append(tbody);
+                resultDiv.append(table);
+            } else {
+                resultDiv.text('No results found.');
+            }
+        });
+    }
+</script>
+</body>
+</html>

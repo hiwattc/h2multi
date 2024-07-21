@@ -48,6 +48,7 @@ public class DataSource3Config {
     }
 
     @Bean
+    @Qualifier("transactionManager3")
     public JpaTransactionManager transactionManager3(EntityManagerFactory entityManagerFactory3) {
         return new JpaTransactionManager(entityManagerFactory3);
     }

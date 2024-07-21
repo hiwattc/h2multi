@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Database Connections</title>
+    <link rel="stylesheet" href="/sqltool/style.css">
+</head>
+<body>
+<h1>Database Connections</h1>
+<a href="/sqltool/testdata">Make connection for test</a><br>
+<a href="/sqltool/new">Add New Connection</a>
+<ul>
+    <li th:each="connection : ${connections}">
+        <a th:href="@{/sqltool/connection/{id}(id=${connection.id})}" th:text="${connection.name}">Connection Name</a>
+    </li>
+</ul>
+</body>
+</html>

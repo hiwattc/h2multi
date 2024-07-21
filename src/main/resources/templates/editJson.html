@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>JSON Editor</title>
+    <style>
+        /* 트리 메뉴 스타일 */
+        ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        ul ul {
+            padding-left: 20px;
+            border-left: 1px dashed #999; /* 들여쓰기를 나타내는 선 */
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+<h2>JSON Editor</h2>
+
+<div id="jsonTree"></div>
+<button onclick="saveJsonData()">Save</button>
+<button onclick="reloadPage()">Reload</button>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var originalData = /*[[${jsonData}]]*/ '{}';
+    var jsonData = JSON.parse(originalData);
+
+    // Function to render JSON data as a tree menu
+    function renderJsonTree(element, data, parentKey = null) {
+        var ul = document.createElement('ul');
+        element.appendChild(ul);
+        for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+                var value = data[key];
+                var newKey = parentKey ? parentKey + '.' + key : key;
+                var li = document.createElement('li');
+                var textNode = document.createTextNode(newKey + ': ');
+                li.appendChild(textNode);
+                if (typeof value === 'object') {
+                    renderJsonTree(li, value, newKey);
+                } else {
+                    var input = document.createElement('input');
+                    input.type = 'text';
+                    input.value = value;
+                    input.dataset.key = newKey; // Store key as a dataset attribute
+                    li.appendChild(input);
+                }
+                ul.appendChild(li);
+            }
+        }
+    }
+
+    // Function to save JSON data
+    function saveJsonData() {
+        var inputs = document.querySelectorAll('#jsonTree input');
+        inputs.forEach(function(input) {
+            var key = input.dataset.key;
+            var value = input.value;
+            setObjectValueByKey(jsonData, key, value);
+        });
+
+        // Send the updated JSON data to the server (you need to implement the server-side logic)
+        // For example, you can use AJAX to send the data to the server
+        // After successful save, you may want to reload the page or show a success message
+        console.log(jsonData);
+    }
+
+    // Function to reload the page
+    function reloadPage() {
+        window.location.reload();
+    }
+
+    // Utility function to set object value by key
+    function setObjectValueByKey(obj, key, value) {
+        var keys = key.split('.');
+        var currentObj = obj;
+        for (var i = 0; i < keys.length - 1; i++) {
+            currentObj = currentObj[keys[i]];
+        }
+        currentObj[keys[keys.length - 1]] = value;
+    }
+
+    // Initialize JSON tree menu on page load
+    window.onload = function() {
+        var jsonTree = document.getElementById('jsonTree');
+        renderJsonTree(jsonTree, jsonData);
+    };
+    /*]]>*/
+</script>
+</body>
+</html>

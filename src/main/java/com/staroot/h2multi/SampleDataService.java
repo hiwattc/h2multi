@@ -24,17 +24,17 @@ public class SampleDataService {
     public void init() {
         // 첫 번째 데이터 소스에 샘플 데이터 입력
         Entity1 entity1 = new Entity1();
-        entity1.setName("Sample Entity 1");
+        entity1.setName("Sample Entity 1-1");
         entity1Repository.save(entity1);
 
         // 두 번째 데이터 소스에 샘플 데이터 입력
         Entity2 entity2 = new Entity2();
-        entity2.setDescription("Sample Entity 2");
+        entity2.setDescription("Sample Entity 2-1");
         entity2Repository.save(entity2);
 
         // 두 번째 데이터 소스에 샘플 데이터 입력
         Entity3 entity3 = new Entity3();
-        entity3.setDescription("Sample Entity 3");
+        entity3.setDescription("Sample Entity 3-1");
         entity3Repository.save(entity3);
     }
 }
