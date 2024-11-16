@@ -14,6 +14,7 @@
     <button type="button" onclick="executeSql()">Execute</button>
 </form>
 <div id="result"></div>
+<div id="logs"></div>
 
 <script>
     function executeSql() {
@@ -46,6 +47,35 @@
             } else {
                 resultDiv.text('No results found.');
             }
+            $.get('/sqltool/logs', $('#sqlForm').serialize(), function(data) {
+                var logs = $('#logs');
+                logs.empty();
+                if (data.length > 0) {
+                    var table = $('<table/>');
+                    var thead = $('<thead/>');
+                    var tbody = $('<tbody/>');
+                    var headerRow = $('<tr/>');
+                    headerRow.append($('<th/>').text("id"));
+                    headerRow.append($('<th/>').text("queryText"));
+                    headerRow.append($('<th/>').text("executionTime"));
+                    headerRow.append($('<th/>').text("connectionId"));
+                    thead.append(headerRow);
+                    table.append(thead);
+
+                    data.forEach(function(row) {
+                        var bodyRow = $('<tr/>');
+                        bodyRow.append($('<td/>').text(row['id']));
+                        bodyRow.append($('<td/>').text(row['queryText']));
+                        bodyRow.append($('<td/>').text(row['executionTime']));
+                        bodyRow.append($('<td/>').text(row['connectionId']));
+                        tbody.append(bodyRow);
+                    });
+                    table.append(tbody);
+                    logs.append(table);
+                }else {
+                    logs.text('No results found.');
+                }
+            });
         });
     }
 </script>

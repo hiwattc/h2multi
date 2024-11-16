@@ -7,7 +7,13 @@
 <body>
 <h1>Database Connections</h1>
 <a href="/sqltool/testdata">Make connection for test</a><br>
-<a href="/sqltool/new">Add New Connection</a>
+<a href="/sqltool/new">Add New Connection</a><br>
+<a href="http://localhost:8080/h2-console">http://localhost:8080/h2-console</a><br>
+<a href="http://localhost:8080/h2-console">jdbc:h2:mem:db1</a><br>
+<a href="http://localhost:8080/h2-console">jdbc:h2:mem:db2</a><br>
+<a href="http://localhost:8080/h2-console">jdbc:h2:mem:db3</a><br>
+<a href="http://localhost:8080/h2-console">jdbc:h2:mem:sqltooldb</a>
+
 <ul>
     <li th:each="connection : ${connections}">
         <a th:href="@{/sqltool/connection/{id}(id=${connection.id})}" th:text="${connection.name}">Connection Name</a>

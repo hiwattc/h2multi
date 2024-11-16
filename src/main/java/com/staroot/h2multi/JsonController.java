@@ -24,4 +24,5 @@ public class JsonController {
         jsonData.putAll(updatedData);
         return "redirect:/edit";
     }
+
 }

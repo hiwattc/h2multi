@@ -46,6 +46,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
+		<!-- Spring Boot DevTools -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope> <!-- 프로덕션에서는 제외됨 -->
+			<optional>true</optional> <!-- 클래스 경합 방지 -->
+		</dependency>
 	</dependencies>
 
 	<build>

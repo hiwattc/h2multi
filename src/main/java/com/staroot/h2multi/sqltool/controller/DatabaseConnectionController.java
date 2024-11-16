@@ -1,6 +1,8 @@
 package com.staroot.h2multi.sqltool.controller;
 
 import com.staroot.h2multi.sqltool.entity.DatabaseConnection;
+import com.staroot.h2multi.sqltool.entity.QueryLog;
+import com.staroot.h2multi.sqltool.repository.QueryLogRepository;
 import com.staroot.h2multi.sqltool.service.DatabaseConnectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,8 @@ import java.util.Map;
 public class DatabaseConnectionController {
     @Autowired
     private DatabaseConnectionService service;
+
+
     @GetMapping("")
     public String home(Model model) {
         model.addAttribute("connections", service.getAllConnections());
@@ -76,33 +80,5 @@ public class DatabaseConnectionController {
         service.saveConnection(connection);
         return "redirect:/sqltool";
     }
-    @PostMapping("/execute")
-    @ResponseBody
-    public List<Map<String, Object>> execute(@RequestParam Long connectionId, @RequestParam String sql) {
-        DatabaseConnection connection = service.getConnectionById(connectionId);
-        return executeSql(connection, sql);
-    }
 
-    private List<Map<String, Object>> executeSql(DatabaseConnection connection, String sql) {
-        List<Map<String, Object>> results = new ArrayList<>();
-
-        try (Connection conn = DriverManager.getConnection(connection.getUrl(), connection.getUsername(), connection.getPassword());
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-
-            ResultSetMetaData metaData = rs.getMetaData();
-            int columnCount = metaData.getColumnCount();
-
-            while (rs.next()) {
-                Map<String, Object> row = new HashMap<>();
-                for (int i = 1; i <= columnCount; i++) {
-                    row.put(metaData.getColumnName(i), rs.getObject(i));
-                }
-                results.add(row);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return results;
-    }
 }

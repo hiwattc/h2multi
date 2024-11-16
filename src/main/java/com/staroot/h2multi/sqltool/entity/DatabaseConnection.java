@@ -12,7 +12,6 @@ public class DatabaseConnection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
     private String url;
     private String username;
